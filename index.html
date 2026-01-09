@@ -3,194 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Firmung – Erinnerungen</title>
+<title>Firmung – Cinematic Experience</title>
 
 <style>
-/* ================= RESET ================= */
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-background:#0a0a0a;
-color:white;
-font-family:-apple-system,BlinkMacSystemFont,system-ui;
-overflow-x:hidden;
-}
+body, html { margin:0; padding:0; height:100%; background:#000; overflow:hidden; font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif; color:white; }
+#intro{ position:absolute; inset:0; display:flex; justify-content:center; align-items:center; flex-direction:column; z-index:1000; background:#000; animation:introFade 3s ease forwards; }
+#intro h1{ font-size:clamp(3rem,8vw,5rem); letter-spacing:4px; margin-bottom:10px; opacity:0; animation:introText 2s ease forwards; }
+#intro p{ font-size:clamp(1.2rem,4vw,2rem); opacity:0; animation:introText 2s ease forwards; animation-delay:0.5s; }
+@keyframes introText{ from{opacity:0; transform:translateY(40px);} to{opacity:1; transform:translateY(0);} }
+@keyframes introFade{ to{opacity:0; pointer-events:none;} }
 
-/* ================= HERO ================= */
-.hero{
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-text-align:center;
-background:radial-gradient(circle at center,#111,#000);
-}
-.hero h1{
-font-size:clamp(2.5rem,7vw,4.5rem);
-letter-spacing:4px;
-animation:fadeIn 2s ease forwards;
-}
-.hero p{
-opacity:.7;
-margin-top:20px;
-animation:fadeIn 2s ease forwards;
-animation-delay:.5s;
-}
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(40px)}
-to{opacity:1;transform:none}
-}
+/* Layers */
+.layer{ position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); display:flex; gap:30px; will-change:transform; }
+.layer img{ height:250px; border-radius:20px; transition: transform 1.2s ease, filter 1.2s ease; cursor:pointer; }
+.layer img:hover{ transform:scale(1.15); filter:brightness(1.05) drop-shadow(0 40px 80px rgba(0,0,0,.7)); }
 
-/* ================= GALLERY ================= */
-.gallery{
-columns:2;
-column-gap:16px;
-padding:20px;
-}
-@media(min-width:800px){.gallery{columns:3}}
-@media(min-width:1200px){.gallery{columns:4}}
+/* Drift Animations */
+.back{ animation:drift 200s linear infinite; opacity:.25; filter:blur(2px); }
+.mid{ animation:drift 120s linear infinite; }
+.front{ animation:drift 80s linear infinite; }
+@keyframes drift{ from{transform:translate(-50%, -50%);} to{transform:translate(-55%, -50%);} }
 
-.card{
-break-inside:avoid;
-margin-bottom:16px;
-border-radius:20px;
-overflow:hidden;
-position:relative;
-transform:translateY(40px) scale(.95);
-opacity:0;
-transition:all 1s cubic-bezier(.2,.8,.2,1);
-}
-.card.visible{
-opacity:1;
-transform:none;
-}
-.card img{
-width:100%;
-display:block;
-transition:transform 1.5s ease,filter 1.5s ease;
-}
-.card:hover img{
-transform:scale(1.12);
-filter:brightness(1.05);
-}
+/* Fullscreen Viewer */
+#viewer{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.95); z-index:2000; }
+#viewer img{ max-width:95%; max-height:95%; border-radius:20px; animation:zoomIn .5s ease; }
+@keyframes zoomIn{ from{transform:scale(0.8); opacity:0;} to{transform:scale(1); opacity:1;} }
 
-/* Glow */
-.card::after{
-content:"";
-position:absolute;
-inset:0;
-box-shadow:inset 0 0 80px rgba(255,255,255,.08);
-pointer-events:none;
-}
+/* CTA */
+.cta{ position:absolute; bottom:8%; left:50%; transform:translateX(-50%); padding:22px 60px; border-radius:60px; background:linear-gradient(135deg,#f2d78a,#b89443); color:#000; font-size:1.4rem; font-weight:bold; text-decoration:none; box-shadow:0 0 70px rgba(230,195,106,.7); animation:pulse 2s infinite alternate; cursor:pointer; }
+@keyframes pulse{ to{transform:translateX(-50%) scale(1.08);} }
 
-/* ================= VIEWER ================= */
-.viewer{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.95);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:999;
-}
-.viewer img{
-max-width:95%;
-max-height:95%;
-border-radius:20px;
-box-shadow:0 0 80px rgba(255,255,255,.3);
-animation:zoomIn .5s ease;
-}
-@keyframes zoomIn{
-from{transform:scale(.8);opacity:0}
-to{transform:scale(1);opacity:1}
-}
-
-/* ================= CTA ================= */
-.cta{
-height:80vh;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-text-align:center;
-}
-.cta a{
-margin-top:30px;
-padding:22px 60px;
-border-radius:60px;
-background:linear-gradient(135deg,#f2d78a,#b89443);
-color:#000;
-font-size:1.4rem;
-font-weight:bold;
-text-decoration:none;
-box-shadow:0 0 70px rgba(230,195,106,.7);
-animation:pulse 2s infinite alternate;
-}
-@keyframes pulse{
-to{transform:scale(1.08)}
-}
 </style>
 </head>
 <body>
 
-<section class="hero">
+<div id="intro">
 <h1>Firmung</h1>
-<p>Ein Moment. Eine Erinnerung.</p>
-</section>
-
-<section class="gallery" id="gallery"></section>
-
-<section class="cta">
-<h2>Alle Bilder</h2>
-<a href="HIER_DEIN_DROPBOX_LINK" target="_blank">Download</a>
-</section>
-
-<div class="viewer" id="viewer" onclick="this.style.display='none'">
-<img id="viewerImg">
+<p>Ein Moment für die Erinnerung</p>
 </div>
 
+<div class="layer back" id="back"></div>
+<div class="layer mid" id="mid"></div>
+<div class="layer front" id="front"></div>
+
+<div id="viewer" onclick="this.style.display='none'"><img id="viewerImg"></div>
+
+<a class="cta" id="downloadCTA" href="HIER_DEIN_DROPBOX_LINK" target="_blank">Alle Bilder herunterladen</a>
+
 <script>
-/* ================= LOAD IMAGES ================= */
-/* !!! DAS FUNKTIONIERT – BEWÄHRT !!! */
+// GitHub API
+const USER="Elias3422", REPO="Firmung-", PATH="bilder", API=`https://api.github.com/repos/${USER}/${REPO}/contents/${PATH}`;
+async function loadImages(){
+  const res = await fetch(API);
+  const files = await res.json();
+  const imgs = files.filter(f=>/\.(jpg|jpeg|png|webp)$/i.test(f.name)).map(f=>f.download_url);
 
-const USER="Elias3422";
-const REPO="Firmung-";
-const PATH="bilder";
-const API=`https://api.github.com/repos/${USER}/${REPO}/contents/${PATH}`;
-
-fetch(API)
-.then(r=>r.json())
-.then(files=>{
-const gallery=document.getElementById("gallery");
-files.filter(f=>f.type==="file" && /\.(jpg|jpeg|png|webp)$/i.test(f.name))
-.forEach(f=>{
-const card=document.createElement("div");
-card.className="card";
-const img=document.createElement("img");
-img.src=f.download_url;
-img.onclick=()=>openViewer(f.download_url);
-card.appendChild(img);
-gallery.appendChild(card);
-});
-observe();
-});
-
-/* ================= ANIMATION ================= */
-function observe(){
-const io=new IntersectionObserver(entries=>{
-entries.forEach(e=>{
-if(e.isIntersecting)e.target.classList.add("visible");
-});
-},{threshold:.2});
-document.querySelectorAll(".card").forEach(c=>io.observe(c));
+  fillLayer("back", imgs, 3);
+  fillLayer("mid", imgs, 2);
+  fillLayer("front", imgs, 1);
 }
-
-/* ================= VIEWER ================= */
+function fillLayer(id, imgs, step){
+  const layer = document.getElementById(id);
+  [...imgs,...imgs].forEach((src,i)=>{
+    if(i%step) return;
+    const img = document.createElement("img");
+    img.src = src;
+    img.onclick = ()=>openViewer(src);
+    layer.appendChild(img);
+  });
+}
 function openViewer(src){
-document.getElementById("viewerImg").src=src;
-document.getElementById("viewer").style.display="flex";
+  document.getElementById("viewerImg").src=src;
+  document.getElementById("viewer").style.display="flex";
 }
-</script>
 
+// Intro Fade
+setTimeout(()=>document.getElementById("intro").style.display="none",3500);
+
+// Mouse/Gyro Parallax
+document.addEventListener("mousemove", e=>{
+  const x = (e.clientX/window.innerWidth -0.5)*50;
+  const y = (e.clientY/window.innerHeight -0.5)*20;
+  document.getElementById("front").style.transform=`translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+  document.getElementById("mid").style.transform=`translate(calc(-50% + ${x/2}px), calc(-50% + ${y/2}px))`;
+  document.getElementById("back").style.transform=`translate(calc(-50% + ${x/4}px), calc(-50% + ${y/4}px))`;
+});
+
+// Mobile Gyro
+if(window.DeviceOrientationEvent){
+  window.addEventListener('deviceorientation', e=>{
+    const gamma = e.gamma||0;
+    const beta = e.beta||0;
+    document.getElementById("front").style.transform=`translate(calc(-50% + ${gamma}px), calc(-50% + ${beta/5}px))`;
+    document.getElementById("mid").style.transform=`translate(calc(-50% + ${gamma/2}px), calc(-50% + ${beta/10}px))`;
+    document.getElementById("back").style.transform=`translate(calc(-50% + ${gamma/4}px), calc(-50% + ${beta/20}px))`;
+  });
+}
+
+loadImages();
+</script>
 </body>
 </html>
