@@ -2,263 +2,182 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Firmung – Ein Moment für die Ewigkeit</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Firmung – Ein Moment</title>
 
 <style>
-
-/* =========================================================
-   PART 001–050 : CORE RESET + VARIABLES
-========================================================= */
+/* =========================
+   RESET + VARIABLES
+========================= */
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
---gold:#d9b56c;
---dark:#050505;
---ease:cubic-bezier(.22,.61,.36,1);
+--bg:#000;
+--text:#fff;
+--accent:#e6c36a;
 }
 html,body{
-background:var(--dark);
-color:#fff;
-font-family:system-ui,-apple-system,BlinkMacSystemFont;
-overflow-x:hidden;
+height:100%;
+background:var(--bg);
+color:var(--text);
+font-family:-apple-system,BlinkMacSystemFont,system-ui;
 }
 
-/* =========================================================
-   PART 051–120 : PRELOADER
-========================================================= */
-#loader{
-position:fixed;inset:0;
+/* =========================
+   INTRO
+========================= */
+.intro{
+position:fixed;
+inset:0;
 background:#000;
 display:flex;
 align-items:center;
 justify-content:center;
-flex-direction:column;
-z-index:999;
+z-index:10;
+animation:introOut 2.5s ease forwards;
+animation-delay:2s;
 }
-#progress{
-margin-top:20px;
-opacity:.7;
-}
-
-/* =========================================================
-   PART 121–200 : INTRO CINEMA
-========================================================= */
-#intro{
-position:fixed;inset:0;
-background:radial-gradient(circle,#111,#000);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:900;
-animation:introFade 3s ease forwards;
-animation-delay:2.5s;
-}
-#intro h1{
-font-size:clamp(3rem,7vw,5rem);
-letter-spacing:5px;
+.intro h1{
+font-size:clamp(2.5rem,8vw,4rem);
+letter-spacing:3px;
 opacity:0;
-animation:introText 2s ease forwards;
+animation:introText 1.5s ease forwards;
 }
 @keyframes introText{to{opacity:1}}
-@keyframes introFade{to{opacity:0;pointer-events:none}}
+@keyframes introOut{to{opacity:0;pointer-events:none}}
 
-/* =========================================================
-   PART 201–280 : HERO
-========================================================= */
-.hero{
+/* =========================
+   STORY CONTAINER
+========================= */
+.story{
 height:100vh;
+overflow-y:scroll;
+scroll-snap-type:y mandatory;
+}
+
+/* =========================
+   SLIDE
+========================= */
+.slide{
+height:100vh;
+scroll-snap-align:start;
+position:relative;
 display:flex;
 align-items:center;
 justify-content:center;
-flex-direction:column;
-text-align:center;
-}
-.hero h2{
-font-size:clamp(3rem,7vw,5rem);
-letter-spacing:4px;
-}
-.hero p{
-margin-top:20px;
-opacity:.6;
-}
-
-/* =========================================================
-   PART 281–360 : SCENE & DEPTH
-========================================================= */
-.scene{
-height:140vh;
-position:relative;
 overflow:hidden;
 }
-.layer{
-position:absolute;
-top:50%;
-display:flex;
-gap:40px;
-transform:translateY(-50%);
-will-change:transform;
+.slide img{
+width:100%;
+height:100%;
+object-fit:cover;
+transform:scale(1.05);
+animation:slowZoom 20s linear infinite;
 }
-.layer img{
-height:300px;
-border-radius:20px;
-filter:brightness(.9) contrast(1.1);
-transition:transform 1.2s var(--ease),filter 1.2s var(--ease);
-}
-.layer img:hover{
-transform:scale(1.18);
-filter:brightness(1.1)
-drop-shadow(0 60px 120px rgba(0,0,0,.9));
-}
-.back{animation:drift 200s linear infinite;opacity:.25;filter:blur(3px)}
-.mid{animation:drift 130s linear infinite}
-.front{animation:drift 80s linear infinite}
-@keyframes drift{
-from{transform:translate(0,-50%)}
-to{transform:translate(-50%,-50%)}
+@keyframes slowZoom{
+from{transform:scale(1.05)}
+to{transform:scale(1.15)}
 }
 
-/* =========================================================
-   PART 361–430 : FULLSCREEN VIEWER
-========================================================= */
-#viewer{
-position:fixed;
+/* cinematic fade */
+.slide::after{
+content:"";
+position:absolute;
 inset:0;
-background:rgba(0,0,0,.95);
-display:none;
+background:linear-gradient(
+to bottom,
+rgba(0,0,0,.4),
+rgba(0,0,0,.1),
+rgba(0,0,0,.6)
+);
+}
+
+/* =========================
+   TEXT OVERLAY
+========================= */
+.caption{
+position:absolute;
+bottom:10%;
+left:8%;
+right:8%;
+font-size:clamp(1.2rem,4vw,2rem);
+line-height:1.3;
+opacity:.85;
+}
+
+/* =========================
+   FINAL CTA
+========================= */
+.cta{
+height:100vh;
+scroll-snap-align:start;
+display:flex;
+flex-direction:column;
 align-items:center;
 justify-content:center;
-z-index:1000;
-}
-#viewer img{
-max-width:90%;
-max-height:90%;
-border-radius:20px;
-}
-
-/* =========================================================
-   PART 431–520 : CTA
-========================================================= */
-.cta{
 text-align:center;
-margin:160px 0;
+padding:40px;
+}
+.cta h2{
+font-size:clamp(2.5rem,7vw,4rem);
+margin-bottom:30px;
 }
 .cta a{
-padding:26px 64px;
-font-size:1.4rem;
+padding:22px 48px;
 border-radius:60px;
 background:linear-gradient(135deg,#f2d78a,#b89443);
 color:#000;
+font-size:1.3rem;
 text-decoration:none;
-box-shadow:0 0 80px rgba(217,181,108,.7);
-transition:all .4s var(--ease);
+box-shadow:0 0 60px rgba(230,195,106,.7);
 }
-.cta a:hover{
-transform:translateY(-8px) scale(1.08);
-box-shadow:0 0 140px rgba(217,181,108,1);
-}
-
-/* =========================================================
-   PART 521–600 : FOOTER + FINISH
-========================================================= */
-footer{text-align:center;opacity:.4;padding-bottom:40px}
-
 </style>
 </head>
 
 <body>
 
-<div id="loader">
-    <h2>Lade Erinnerungen…</h2>
-    <div id="progress">0%</div>
+<div class="intro">
+  <h1>Ein Moment</h1>
 </div>
 
-<div id="intro"><h1>Ein Moment</h1></div>
-
-<section class="hero">
-<h2>Für die Ewigkeit</h2>
-<p>Firmung – festgehalten in Bildern</p>
-</section>
-
-<section class="scene">
-<div class="layer back" id="back"></div>
-<div class="layer mid" id="mid"></div>
-<div class="layer front" id="front"></div>
-</section>
-
-<div class="cta">
-<a href="HIER_DEIN_DROPBOX_LINK" target="_blank">
-Gesamte Galerie herunterladen
-</a>
-</div>
-
-<footer>© Firmung</footer>
-
-<div id="viewer" onclick="this.style.display='none'">
-<img id="viewerImg">
-</div>
+<div class="story" id="story"></div>
 
 <script>
-/* =========================================================
-   AUTO IMAGE ENGINE (GitHub API)
-========================================================= */
+/* =========================
+   AUTO LOAD IMAGES (GitHub)
+========================= */
 const USER="Elias3422";
 const REPO="Firmung-";
 const PATH="bilder";
 const API=`https://api.github.com/repos/${USER}/${REPO}/contents/${PATH}`;
 
-async function loadImages(){
+async function load(){
 const res=await fetch(API);
 const files=await res.json();
-const imgs=files.filter(f=>/\.(jpg|jpeg|png|webp)$/i.test(f.name))
-.map(f=>f.download_url);
+const imgs=files.filter(f=>/\.(jpg|jpeg|png|webp)$/i.test(f.name));
 
-let loaded=0;
-imgs.forEach(src=>{
-const img=new Image();
-img.src=src;
-img.onload=()=>{
-loaded++;
-document.getElementById("progress").innerText=
-Math.round(loaded/imgs.length*100)+"%";
-if(loaded===imgs.length){
-document.getElementById("loader").style.display="none";
-init(imgs);
-}
-};
-});
-}
+const story=document.getElementById("story");
 
-function init(imgs){
-fill("back",imgs,3);
-fill("mid",imgs,2);
-fill("front",imgs,1);
-}
-
-function fill(id,imgs,step){
-const el=document.getElementById(id);
-[...imgs,...imgs].forEach((src,i)=>{
-if(i%step) return;
+imgs.forEach(f=>{
+const slide=document.createElement("div");
+slide.className="slide";
 const img=document.createElement("img");
-img.src=src;
-img.onclick=()=>openViewer(src);
-el.appendChild(img);
+img.src=f.download_url;
+slide.appendChild(img);
+story.appendChild(slide);
 });
+
+// CTA
+const cta=document.createElement("div");
+cta.className="cta";
+cta.innerHTML=`
+<h2>Alle Bilder</h2>
+<a href="HIER_DEIN_DROPBOX_LINK" target="_blank">
+Herunterladen
+</a>`;
+story.appendChild(cta);
 }
 
-function openViewer(src){
-const v=document.getElementById("viewer");
-document.getElementById("viewerImg").src=src;
-v.style.display="flex";
-}
-
-loadImages();
-
-/* Parallax */
-document.addEventListener("mousemove",e=>{
-const x=(e.clientX/window.innerWidth-.5)*40;
-document.getElementById("front").style.transform=
-`translate(${x}px,-50%)`;
-});
+load();
 </script>
 
 </body>
