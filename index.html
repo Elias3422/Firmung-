@@ -2,13 +2,12 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Ein heiliger Moment</title>
+<title>Firmung – Ein besonderer Moment</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ================= CORE ================= */
 :root {
-    --gold: #d6b36a;
+    --gold: #d9b56c;
 }
 
 * {
@@ -18,13 +17,41 @@
 }
 
 body {
-    background: radial-gradient(circle at top, #111 0%, #000 60%);
+    background: radial-gradient(circle at top, #111, #000 70%);
+    color: #fff;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    color: white;
     overflow-x: hidden;
 }
 
-/* ================= HERO ================= */
+/* ===== INTRO ===== */
+.intro {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+    animation: introFade 3s ease forwards;
+    animation-delay: 2s;
+}
+
+.intro h1 {
+    font-size: clamp(3rem, 6vw, 5rem);
+    letter-spacing: 4px;
+    animation: introText 2s ease forwards;
+    opacity: 0;
+}
+
+@keyframes introText {
+    to { opacity: 1; }
+}
+
+@keyframes introFade {
+    to { opacity: 0; pointer-events: none; }
+}
+
+/* ===== HERO ===== */
 .hero {
     height: 100vh;
     display: flex;
@@ -32,33 +59,22 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    position: relative;
 }
 
-.hero h1 {
+.hero h2 {
     font-size: clamp(3rem, 7vw, 5rem);
     letter-spacing: 3px;
 }
 
 .hero p {
     margin-top: 20px;
-    opacity: 0.7;
-    font-size: 1.2rem;
+    opacity: .7;
 }
 
-/* film grain */
-.hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-}
-
-/* ================= GALLERY ================= */
+/* ===== SCENE ===== */
 .scene {
     position: relative;
-    height: 90vh;
+    height: 130vh;
     overflow: hidden;
 }
 
@@ -68,64 +84,52 @@ body {
     display: flex;
     gap: 40px;
     transform: translateY(-50%);
-    will-change: transform;
 }
 
 .layer img {
     height: 300px;
     border-radius: 20px;
     filter: brightness(.9) contrast(1.1);
-    transition: transform 1s ease, filter 1s ease;
+    transition: transform 1.2s ease, filter 1.2s ease;
 }
 
 .layer img:hover {
-    transform: scale(1.15);
-    filter: brightness(1.05) drop-shadow(0 40px 80px rgba(0,0,0,.8));
+    transform: scale(1.18);
+    filter: brightness(1.1) drop-shadow(0 50px 100px rgba(0,0,0,.9));
 }
 
-/* different depths */
-.layer.back {
-    animation: move 180s linear infinite;
-    opacity: .35;
-    filter: blur(2px);
-}
+/* Depth */
+.back  { animation: drift 200s linear infinite; opacity: .25; filter: blur(3px); }
+.mid   { animation: drift 130s linear infinite; }
+.front { animation: drift 80s  linear infinite; }
 
-.layer.mid {
-    animation: move 120s linear infinite;
-}
-
-.layer.front {
-    animation: move 80s linear infinite;
-}
-
-@keyframes move {
+@keyframes drift {
     from { transform: translate(0, -50%); }
     to   { transform: translate(-50%, -50%); }
 }
 
-/* ================= CTA ================= */
+/* ===== CTA ===== */
 .cta {
     text-align: center;
-    margin: 120px 0;
+    margin: 160px 0;
 }
 
 .cta a {
-    padding: 22px 50px;
-    border-radius: 50px;
-    background: linear-gradient(135deg, #f1d58a, #b99643);
-    color: black;
-    font-size: 1.3rem;
+    padding: 24px 60px;
+    font-size: 1.4rem;
+    border-radius: 60px;
+    background: linear-gradient(135deg, #f2d78a, #b89443);
+    color: #000;
     text-decoration: none;
-    box-shadow: 0 0 40px rgba(214,179,106,.6);
+    box-shadow: 0 0 60px rgba(217,181,108,.7);
     transition: all .4s ease;
 }
 
 .cta a:hover {
-    transform: translateY(-6px) scale(1.05);
-    box-shadow: 0 0 80px rgba(214,179,106,.9);
+    transform: translateY(-8px) scale(1.08);
+    box-shadow: 0 0 120px rgba(217,181,108,1);
 }
 
-/* ================= FOOTER ================= */
 footer {
     text-align: center;
     opacity: .4;
@@ -136,9 +140,13 @@ footer {
 
 <body>
 
+<div class="intro">
+    <h1>Ein Moment</h1>
+</div>
+
 <section class="hero">
-    <h1>Ein heiliger Moment</h1>
-    <p>Firmung – festgehalten für die Ewigkeit</p>
+    <h2>Für die Ewigkeit</h2>
+    <p>Firmung – festgehalten in Bildern</p>
 </section>
 
 <section class="scene">
@@ -153,38 +161,48 @@ footer {
     </a>
 </div>
 
-<footer>
-    © Firmung
-</footer>
+<footer>© Firmung</footer>
 
 <script>
-/* ========= BILDER (NICHT UMBENENNEN) ========= */
-const bilder = [
-    "IMG_001.jpg",
-    "IMG_002.jpg",
-    "IMG_003.jpg"
-    // ...
-];
+/* ====== AUTO IMAGE LOADER (GitHub API) ====== */
+const GITHUB_USER = "Elias3422";
+const REPO_NAME   = "Firmung-";
+const FOLDER_PATH = "bilder";
 
-const layers = {
-    back: document.getElementById("back"),
-    mid: document.getElementById("mid"),
-    front: document.getElementById("front")
-};
+const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/${FOLDER_PATH}`;
 
-function fill(layer, factor) {
-    [...bilder, ...bilder].forEach((name, i) => {
-        if (i % factor !== 0) return;
+async function loadImages() {
+    const res = await fetch(API_URL);
+    const files = await res.json();
+
+    const images = files
+        .filter(f => f.type === "file" && /\.(jpg|jpeg|png|webp)$/i.test(f.name))
+        .map(f => f.download_url);
+
+    fill("back", images, 3);
+    fill("mid", images, 2);
+    fill("front", images, 1);
+}
+
+function fill(id, images, step) {
+    const layer = document.getElementById(id);
+    [...images, ...images].forEach((src, i) => {
+        if (i % step !== 0) return;
         const img = document.createElement("img");
-        img.src = "bilder/" + name;
+        img.src = src;
         img.loading = "lazy";
         layer.appendChild(img);
     });
 }
 
-fill(layers.back, 3);
-fill(layers.mid, 2);
-fill(layers.front, 1);
+loadImages();
+
+/* Maus-Parallax */
+document.addEventListener("mousemove", e => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 30;
+    document.getElementById("front").style.transform =
+        `translate(${x}px, -50%)`;
+});
 </script>
 
 </body>
