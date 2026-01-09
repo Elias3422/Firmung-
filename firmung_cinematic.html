@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Firmung – Cinematic Experience</title>
+    <style>
+        :root {
+            --gold: #ffd700;
+            --gold-light: #f2d78a;
+            --gold-dark: #b89443;
+            --bg: #0a0a0a;
+            --glow: rgba(255, 215, 0, 0.6);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            font-family: -apple-system, system-ui, sans-serif;
+            color: #fff;
+            position: fixed;
+            width: 100%;
+        }
+
+        /* Background */
+        #bg {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(at 20% 30%, rgba(255,215,0,0.08), transparent 50%),
+                radial-gradient(at 80% 70%, rgba(242,215,138,0.06), transparent 50%),
+                linear-gradient(135deg, #050505, var(--bg));
+            animation: bgShift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            to { filter: hue-rotate(5deg) brightness(1.05); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 8px var(--glow);
+            animation: float 12s infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10%, 90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(80px); opacity: 0; }
+        }
+
+        /* Loading */
+        #loading {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #050505;
+            z-index: 1000;
+            transition: all 1s;
+        }
+
+        #loading.hide { opacity: 0; transform: scale(1.1); pointer-events: none; }
+
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 3px solid rgba(255,215,0,0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.68,-0.55,0.265,1.55) infinite;
+            margin-bottom: 25px;
+            box-shadow: 0 0 30px var(--glow);
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            letter-spacing: 2px;
+            font-weight: 300;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            50% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        /* Cursor */
+        #cursor {
+            position: fixed;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, var(--gold), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            mix-blend-mode: screen;
+            transition: transform 0.15s;
+        }
+
+        #cursor.show { opacity: 0.6; }
+        #cursor.hover { transform: scale(2.5); opacity: 0.9; }
+
+        /* Intro */
+        #intro {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 1.5s cubic-bezier(0.25,0.46,0.45,0.94);
+        }
+
+        #intro.hide { opacity: 0; transform: scale(0.9); backdrop-filter: blur(20px); }
+
+        #intro h1 {
+            font-size: clamp(4rem, 12vw, 8rem);
+            margin-bottom: 0.3em;
+            opacity: 0;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold-dark) 100%);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleIn 2.5s forwards, shimmer 4s infinite;
+            font-weight: 200;
+            letter-spacing: 0.15em;
+            text-shadow: 0 0 60px var(--glow);
+        }
+
+        @keyframes titleIn {
+            from { opacity: 0; transform: translateY(80px) scale(0.8); filter: blur(20px); }
+            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        @keyframes shimmer {
+            50% { background-position: 100%; }
+        }
+
+        #intro p {
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            opacity: 0;
+            animation: fadeIn 2.5s 0.5s forwards;
+            font-weight: 200;
+            letter-spacing: 0.15em;
+        }
+
+        #intro .sub {
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            opacity: 0;
+            animation: fadeIn 2.5s 1s forwards;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.05em;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(50px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        /* Gallery */
+        #gallery {
+            position: fixed;
+            inset: 0;
+            z-index: 5;
+            perspective: 1000px;
+        }
+
+        .layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: clamp(20px, 4vw, 50px);
+            will-change: transform;
+        }
+
+        .layer img {
+            height: clamp(180px, 30vh, 400px);
+            width: auto;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.34,1.56,0.64,1);
+            object-fit: cover;
+            aspect-ratio: 3/4;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,215,0,0.1);
+            filter: brightness(0.85) contrast(1.05);
+        }
+
+        .layer img:hover {
+            transform: scale(1.15) translateY(-20px);
+            filter: brightness(1.1) contrast(1.15) saturate(1.1);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.9), 0 0 60px var(--glow), 0 0 0 2px var(--gold);
+            z-index: 100;
+        }
+
+        .layer img.loading {
+            opacity: 0.2;
+            filter: blur(10px) grayscale(1);
+        }
+
+        .layer img.loaded {
+            animation: reveal 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;
+        }
+
+        @keyframes reveal {
+            from { opacity: 0; transform: scale(0.8) translateY(30px); filter: blur(20px); }
+            to { opacity: 1; transform: scale(1); filter: brightness(0.85) contrast(1.05); }
+        }
+
+        .back {
+            animation: drift 250s linear infinite;
+            opacity: 0.25;
+            filter: blur(4px);
+        }
+
+        .mid {
+            animation: drift 150s linear infinite reverse;
+            opacity: 0.7;
+            filter: blur(1px);
+        }
+
+        .front {
+            animation: drift 100s linear infinite;
+            opacity: 1;
+        }
+
+        @keyframes drift {
+            from { transform: translate(-50%, -50%) translateX(-150vw); }
+            to { transform: translate(-50%, -50%) translateX(150vw); }
+        }
+
+        /* Viewer */
+        #viewer {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.97);
+            z-index: 200;
+            backdrop-filter: blur(30px);
+        }
+
+        #viewer.show { display: flex; animation: viewerIn 0.4s; }
+
+        @keyframes viewerIn {
+            from { opacity: 0; backdrop-filter: blur(0); }
+        }
+
+        #viewer img {
+            max-width: 92%;
+            max-height: 92%;
+            border-radius: 15px;
+            animation: zoomIn 0.6s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow: 0 40px 120px rgba(0,0,0,0.9), 0 0 100px var(--glow);
+            cursor: zoom-out;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.3); opacity: 0; filter: blur(30px); }
+        }
+
+        .close {
+            position: absolute;
+            top: clamp(15px,3vh,30px);
+            right: clamp(15px,3vw,30px);
+            font-size: clamp(2rem,5vw,3rem);
+            color: #fff;
+            cursor: pointer;
+            background: rgba(0,0,0,0.6);
+            width: clamp(50px,10vw,70px);
+            height: clamp(50px,10vw,70px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            border: 2px solid rgba(255,215,0,0.3);
+        }
+
+        .close:hover {
+            background: var(--gold);
+            color: var(--bg);
+            transform: scale(1.15) rotate(90deg);
+            box-shadow: 0 0 40px var(--glow);
+        }
+
+        /* CTA */
+        #cta {
+            position: fixed;
+            bottom: clamp(5%, 8vh, 10%);
+            left: 50%;
+            transform: translateX(-50%);
+            padding: clamp(18px,3vh,28px) clamp(50px,10vw,100px);
+            border-radius: 60px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold-dark));
+            background-size: 200%;
+            color: var(--bg);
+            font-size: clamp(1.1rem,2.5vw,1.8rem);
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 0 60px var(--glow), 0 20px 40px rgba(0,0,0,0.5);
+            animation: ctaPulse 3s infinite, ctaShimmer 4s linear infinite;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            letter-spacing: 0.05em;
+            z-index: 50;
+            display: inline-block;
+        }
+
+        #cta:hover {
+            transform: translateX(-50%) scale(1.08) translateY(-5px);
+            box-shadow: 0 0 100px var(--glow), 0 30px 60px rgba(0,0,0,0.7);
+            background-position: 100%;
+        }
+
+        @keyframes ctaPulse {
+            50% { transform: translateX(-50%) scale(1.03); }
+        }
+
+        @keyframes ctaShimmer {
+            to { background-position: 200%; }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .layer { gap: 20px; }
+            .layer img { height: clamp(200px,35vh,300px); border-radius: 15px; }
+            #cursor { display: none; }
+            body { cursor: auto; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+
+        .error {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(220,53,69,0.95);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            z-index: 1001;
+            animation: slideIn 0.4s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(150%); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="bg"></div>
+    <div id="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Lade Erinnerungen...</div>
+    </div>
+    <div id="cursor"></div>
+    <div id="intro">
+        <h1>Firmung</h1>
+        <p>Ein Moment für die Ewigkeit</p>
+        <div class="sub">Bewege die Maus für eine cineastische Erfahrung</div>
+    </div>
+    <div id="gallery">
+        <div class="layer back" id="back"></div>
+        <div class="layer mid" id="mid"></div>
+        <div class="layer front" id="front"></div>
+    </div>
+    <div id="viewer">
+        <div class="close" onclick="closeViewer()">&times;</div>
+        <img id="viewerImg" alt="">
+    </div>
+    <a id="cta" href="#" target="_blank">📸 Alle Bilder herunterladen</a>
+
+    <script>
+        class Gallery {
+            constructor() {
+                this.cfg = { user: "Elias3422", repo: "Firmung-", path: "bilder", maxRetries: 3 };
+                this.state = { images: [], loaded: 0, total: 0, loading: true };
+                this.els = {};
+                this.mouse = { x: innerWidth/2, y: innerHeight/2 };
+                this.target = { x: innerWidth/2, y: innerHeight/2 };
+                this.isMobile = innerWidth <= 768;
+                this.init();
+            }
+
+            async init() {
+                try {
+                    ['loading','intro','back','mid','front','viewer','viewerImg','cursor','cta','bg'].forEach(id => {
+                        this.els[id] = document.getElementById(id);
+                    });
+                    this.createParticles();
+                    this.setupEvents();
+                    await this.loadImages();
+                    this.start();
+                } catch(e) {
+                    this.error('Init failed', e);
+                }
+            }
+
+            createParticles() {
+                for(let i = 0; i < (this.isMobile ? 15 : 30); i++) {
+                    const p = document.createElement('div');
+                    p.className = 'particle';
+                    p.style.left = Math.random() * 100 + '%';
+                    p.style.animationDelay = Math.random() * 15 + 's';
+                    p.style.animationDuration = (10 + Math.random() * 10) + 's';
+                    this.els.bg.appendChild(p);
+                }
+            }
+
+            setupEvents() {
+                document.addEventListener('keydown', e => e.key === 'Escape' && this.closeViewer());
+                document.addEventListener('mousemove', e => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                    if(!this.isMobile) {
+                        this.els.cursor.style.left = e.clientX + 'px';
+                        this.els.cursor.style.top = e.clientY + 'px';
+                    }
+                });
+                
+                if(!this.isMobile) this.els.cursor.classList.add('show');
+                
+                window.addEventListener('resize', () => {
+                    this.isMobile = innerWidth <= 768;
+                    this.els.cursor.classList.toggle('show', !this.isMobile);
+                });
+            }
+
+            async loadImages() {
+                const url = `https://api.github.com/repos/${this.cfg.user}/${this.cfg.repo}/contents/${this.cfg.path}`;
+                try {
+                    const r = await this.fetchRetry(url);
+                    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+                    
+                    const files = await r.json();
+                    this.state.images = files.filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name))
+                                             .map(f => ({ url: f.download_url, name: f.name }));
+                    this.state.total = this.state.images.length;
+                    
+                    if(!this.state.total) throw new Error('No images');
+                    
+                    this.distribute();
+                    this.els.cta.href = "DEIN_DOWNLOAD_LINK"; // Replace!
+                } catch(e) {
+                    this.error('Load failed', e);
+                    throw e;
+                }
+            }
+
+            async fetchRetry(url, tries = this.cfg.maxRetries) {
+                for(let i = 0; i < tries; i++) {
+                    try {
+                        return await fetch(url, { headers: { Accept: 'application/vnd.github.v3+json' }});
+                    } catch(e) {
+                        if(i === tries - 1) throw e;
+                        await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+                    }
+                }
+            }
+
+            distribute() {
+                const layers = ['back','mid','front'];
+                const steps = [4,3,2];
+                layers.forEach((id, i) => {
+                    const layer = this.els[id];
+                    const imgs = [...this.state.images, ...this.state.images, ...this.state.images];
+                    imgs.forEach((data, j) => {
+                        if(j % steps[i] !== 0) return;
+                        const img = document.createElement('img');
+                        img.className = 'loading';
+                        img.alt = data.name;
+                        img.loading = 'lazy';
+                        img.onclick = () => this.openViewer(data.url, data.name);
+                        img.onmouseenter = () => !this.isMobile && this.els.cursor.classList.add('hover');
+                        img.onmouseleave = () => !this.isMobile && this.els.cursor.classList.remove('hover');
+                        
+                        const pre = new Image();
+                        pre.onload = () => {
+                            img.src = data.url;
+                            img.classList.remove('loading');
+                            img.classList.add('loaded');
+                            this.state.loaded++;
+                            if(this.state.loaded >= this.state.total * 0.3 && this.state.loading) this.start();
+                        };
+                        pre.onerror = () => img.style.display = 'none';
+                        pre.src = data.url;
+                        
+                        layer.appendChild(img);
+                    });
+                });
+            }
+
+            start() {
+                if(!this.state.loading) return;
+                this.state.loading = false;
+                this.els.loading.classList.add('hide');
+                
+                setTimeout(() => {
+                    this.els.intro.classList.add('hide');
+                    setTimeout(() => {
+                        this.els.intro.style.display = 'none';
+                        this.animate();
+                    }, 1500);
+                }, 4000);
+            }
+
+            animate() {
+                this.target.x += (this.mouse.x - this.target.x) * 0.05;
+                this.target.y += (this.mouse.y - this.target.y) * 0.05;
+                
+                const cx = innerWidth / 2;
+                const cy = innerHeight / 2;
+                const ox = (this.target.x - cx) / cx;
+                const oy = (this.target.y - cy) / cy;
+                
+                [
+                    { el: this.els.front, m: 40 },
+                    { el: this.els.mid, m: 20 },
+                    { el: this.els.back, m: 10 }
+                ].forEach(({ el, m }) => {
+                    const tx = ox * m;
+                    const ty = oy * m * 0.5;
+                    el.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px))`;
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+
+            openViewer(src, alt) {
+                this.els.viewerImg.src = src;
+                this.els.viewerImg.alt = alt;
+                this.els.viewer.classList.add('show');
+            }
+
+            closeViewer() {
+                this.els.viewer.classList.remove('show');
+            }
+
+            error(msg, e) {
+                console.error(msg, e);
+                const div = document.createElement('div');
+                div.className = 'error';
+                div.textContent = msg;
+                document.body.appendChild(div);
+                setTimeout(() => div.remove(), 5000);
+                if(this.state.loading) {
+                    this.els.loading.classList.add('hide');
+                    this.state.loading = false;
+                }
+            }
+        }
+
+        function closeViewer() { window.gal?.closeViewer(); }
+        
+        if(document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => window.gal = new Gallery());
+        } else {
+            window.gal = new Gallery();
+        }
+    </script>
+</body>
+</html>
