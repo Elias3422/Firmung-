@@ -6,43 +6,142 @@
     <title>Firmungsbilder - Download</title>
     <style>
         /* Modernes & Elegantes Design */
-        body { font-family: 'Segoe UI', sans-serif; background-color: #fcfaf7; margin: 0; color: #4a4a4a; text-align: center; }
-        header { padding: 40px 20px; }
-        
-        /* Langsamer Bilder-Slider oben */
-        .preview-slider { width: 100%; overflow: hidden; background: #fff; padding: 20px 0; border-y: 1px solid #e0d5c5; }
-        .slider-track { display: flex; width: max-content; animation: scroll 60s linear infinite; }
-        .slider-track img { height: 150px; margin: 0 10px; border-radius: 5px; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #fcfaf7; 
+            margin: 0; 
+            color: #4a4a4a; 
+            line-height: 1.6;
+        }
 
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        header { 
+            padding: 60px 20px; 
+            text-align: center;
+            background: white;
+        }
+
+        h1 { color: #d4af37; margin-bottom: 10px; }
+
+        /* Großer Dropbox-Button */
+        .btn-dropbox {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 15px 35px;
+            background-color: #0061ff; /* Dropbox Blau */
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,97,255,0.3);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .btn-dropbox:hover {
+            transform: scale(1.05);
+            background-color: #004ecc;
+        }
+
+        /* Automatischer Bilder-Slider (Vorschau) */
+        .preview-slider { 
+            width: 100%; 
+            overflow: hidden; 
+            background: #fff; 
+            padding: 30px 0; 
+            border-top: 1px solid #e0d5c5; 
+            border-bottom: 1px solid #e0d5c5; 
+        }
+
+        .slider-track { 
+            display: flex; 
+            width: max-content; 
+            animation: scroll 80s linear infinite; 
+        }
+
+        .slider-track img { 
+            height: 200px; 
+            margin: 0 15px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        @keyframes scroll { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-50%); } 
+        }
+
         .preview-slider:hover .slider-track { animation-play-state: paused; }
 
-        /* Gitter für die 90 Bilder */
-        .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 40px; max-width: 1200px; margin: 0 auto; }
-        .grid-item { background: white; padding: 10px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .grid-item img { width: 100%; border-radius: 5px; display: block; margin-bottom: 10px; }
-        .btn-download { display: inline-block; padding: 8px 15px; background: #d4af37; color: white; text-decoration: none; border-radius: 20px; font-size: 0.85em; }
+        /* Gitter für die Einzelansicht */
+        .download-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; 
+            padding: 50px 20px; 
+            max-width: 1300px; 
+            margin: 0 auto; 
+        }
+
+        .grid-item { 
+            background: white; 
+            padding: 12px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            text-align: center;
+        }
+
+        .grid-item img { 
+            width: 100%; 
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+        }
+
+        .btn-single-download { 
+            display: inline-block; 
+            padding: 10px 20px; 
+            background: #d4af37; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 20px; 
+            font-size: 0.9em; 
+            transition: background 0.3s;
+        }
+
+        .btn-single-download:hover { background: #b8962d; }
+
+        footer { padding: 40px; text-align: center; font-size: 0.8em; color: #888; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Erinnerungen an die Firmung</h1>
-        <p>Klicken Sie auf den Button, um die Bilder in voller Qualität zu speichern.</p>
+        <p>Hier finden Sie eine Auswahl der Bilder. Alle 90+ Fotos in voller Qualität gibt es bei Dropbox:</p>
+        
+        <a href="DEIN_DROPBOX_ORDNER_LINK" target="_blank" class="btn-dropbox">
+            Alle Bilder auf Dropbox ansehen (Gesamt-Download möglich)
+        </a>
     </header>
 
     <div class="preview-slider">
-        <div class="slider-track" id="slider-track"></div>
+        <div class="slider-track" id="slider-track">
+            </div>
     </div>
 
-    <main class="download-grid" id="image-grid"></main>
+    <main class="download-grid" id="image-grid">
+        </main>
+
+    <footer>
+        &copy; 2024 Elias3422 - Firmung Fotos
+    </footer>
 
     <script>
-        // --- DEINE DATEN ---
+        // --- DEINE GITHUB DATEN ---
         const nutzer = "Elias3422"; 
-        const repo = "Firmung-"; // Prüfe bitte, ob dein Projekt exakt so heißt!
-        const ordner = "bilder"; // Der Name des Ordners mit den 90 Bildern
-        // -------------------
+        const repo = "Firmung-"; // Prüfe, ob das Minus am Ende so stimmt!
+        const ordner = "bilder"; // Name des Ordners in deinem GitHub Repo
+        // -------------------------
 
         const sliderTrack = document.getElementById('slider-track');
         const imageGrid = document.getElementById('image-grid');
@@ -54,33 +153,36 @@
                 const response = await fetch(url);
                 const dateien = await response.json();
 
-                // Nur echte Bilder filtern
+                // Nur Bilder filtern (jpg, jpeg, png)
                 const bilder = dateien.filter(f => f.name.match(/\.(jpg|jpeg|png)$/i));
 
                 bilder.forEach(bild => {
-                    // Bilder für den Slider oben
+                    // 1. Bilder für den Slider oben
                     const imgS = document.createElement('img');
                     imgS.src = bild.download_url;
                     sliderTrack.appendChild(imgS);
 
-                    // Bilder für das Gitter unten
+                    // 2. Bilder für das Gitter unten
                     const item = document.createElement('div');
                     item.className = 'grid-item';
                     item.innerHTML = `
-                        <img src="${bild.download_url}" loading="lazy">
-                        <a href="${bild.download_url}" download="${bild.name}" class="btn-download">Download</a>
+                        <img src="${bild.download_url}" loading="lazy" alt="Vorschau">
+                        <a href="${bild.download_url}" download="${bild.name}" class="btn-single-download">Bild speichern</a>
                     `;
                     imageGrid.appendChild(item);
                 });
 
-                // Verdoppeln für Endlos-Effekt
-                sliderTrack.innerHTML += sliderTrack.innerHTML;
+                // Verdoppeln für den unendlichen Loop Effekt
+                if (bilder.length > 0) {
+                    sliderTrack.innerHTML += sliderTrack.innerHTML;
+                }
 
             } catch (e) {
-                console.error("Fehler: " + e);
-                document.body.innerHTML += "<p>Bilder konnten nicht geladen werden. Prüfe Repository-Name und Ordner.</p>";
+                console.error("Fehler beim Laden:", e);
+                imageGrid.innerHTML = "<p>Bilder konnten nicht geladen werden. Bitte prüfe den Repository-Namen.</p>";
             }
         }
+
         ladeBilder();
     </script>
 </body>
