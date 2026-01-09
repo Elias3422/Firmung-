@@ -3,240 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erinnerungen im Fluss</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    <title>Segen im Unendlichen</title>
     <style>
         :root {
-            --gold: rgba(212, 175, 55, 0.6);
-            --bg: #050505;
+            --gold: #d4af37;
+            --bg: #020202;
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: var(--bg);
             color: white;
-            font-family: 'Playfair Display', serif;
-            overflow: hidden; /* Verhindert normales Scrollen */
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            perspective: 1000px; /* Erzeugt den 3D-Raum */
         }
 
-        /* --- BACKGROUND --- */
-        .canvas-bg {
+        /* Hintergrund-Sterne */
+        .stars {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%);
+            background: radial-gradient(white, rgba(255,255,255,0) 2px) 0 0 / 50px 50px,
+                        radial-gradient(white, rgba(255,255,255,0) 1px) 10px 10px / 100px 100px;
+            opacity: 0.2;
             z-index: -1;
         }
 
-        /* --- HEADER --- */
         header {
             position: absolute;
-            top: 10%;
-            left: 5%;
-            z-index: 100;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
             pointer-events: none;
         }
 
         h1 {
-            font-size: 5rem;
-            font-style: italic;
+            font-size: 4rem;
+            letter-spacing: 15px;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
             margin: 0;
             opacity: 0.8;
-            letter-spacing: 5px;
-            background: linear-gradient(to right, #fff, var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
-        /* --- DREAM FLOAT CONTAINER --- */
-        .stage {
+        /* Der 3D-Container */
+        #universe {
             position: relative;
             width: 100vw;
             height: 100vh;
-            overflow: hidden;
+            transform-style: preserve-3d;
         }
 
-        .float-layer {
+        /* Die fliegenden Bild-Fragmente */
+        .photo-fragment {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Jedes Bild ist ein "Erinnerungs-Fragment" */
-        .fragment {
-            position: absolute;
-            right: -500px; /* Startet außerhalb rechts */
-            opacity: 0.4;
-            filter: blur(2px) grayscale(30%);
-            transition: transform 0.3s ease-out, opacity 0.5s, filter 0.5s;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            transform-style: preserve-3d;
             cursor: pointer;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            transition: filter 0.5s, transform 0.3s;
         }
 
-        .fragment img {
-            display: block;
-            border: 1px solid rgba(255,255,255,0.1);
-            max-height: 400px;
-            object-fit: cover;
+        .photo-fragment img {
+            width: 100%;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 40px rgba(0,0,0,1);
+            filter: opacity(0.6) brightness(0.7);
+            transition: all 0.5s;
         }
 
-        .fragment:hover {
-            opacity: 1 !important;
-            filter: blur(0) grayscale(0);
-            z-index: 1000 !important;
-            transform: scale(1.1) !important;
+        .photo-fragment:hover img {
+            filter: opacity(1) brightness(1.2);
+            box-shadow: 0 0 50px var(--gold);
+            transform: scale(1.2);
         }
 
-        /* Download-Trigger bei Klick */
-        .dl-hint {
+        .photo-fragment span {
             position: absolute;
             bottom: -30px;
-            left: 0;
-            width: 100%;
+            left: 0; width: 100%;
             text-align: center;
-            font-size: 0.8rem;
             color: var(--gold);
+            font-size: 0.7rem;
             opacity: 0;
-            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .fragment:hover .dl-hint {
-            opacity: 1;
-            bottom: 10px;
-        }
+        .photo-fragment:hover span { opacity: 1; }
 
-        /* --- DROPBOX FIX --- */
         .dropbox-link {
-            position: absolute;
-            bottom: 5%;
-            right: 5%;
-            z-index: 1000;
-            color: var(--gold);
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            color: white;
             text-decoration: none;
             border: 1px solid var(--gold);
-            padding: 15px 30px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            transition: 0.4s;
+            padding: 10px 30px;
+            letter-spacing: 5px;
+            background: rgba(0,0,0,0.8);
+            transition: 0.5s;
         }
 
-        .dropbox-link:hover {
-            background: var(--gold);
-            color: black;
-        }
-
+        .dropbox-link:hover { background: var(--gold); color: black; }
     </style>
 </head>
 <body>
 
-    <div class="canvas-bg"></div>
-
+    <div class="stars"></div>
+    
     <header>
-        <h1>Firmung</h1>
-        <p style="letter-spacing: 10px; opacity: 0.5;">MEMORIES IN MOTION</p>
+        <h1>FIRMUNG</h1>
+        <p style="letter-spacing: 5px;">EINE REISE DURCH DIE ZEIT</p>
     </header>
 
-    <a href="DEIN_DROPBOX_LINK" target="_blank" class="dropbox-link">Full Collection (Dropbox)</a>
+    <a href="DEIN_DROPBOX_LINK" target="_blank" class="dropbox-link">ALLE BILDER</a>
 
-    <div class="stage" id="stage">
-        </div>
+    <div id="universe"></div>
 
     <script>
         const nutzer = "Elias3422"; 
         const repo = "Firmung-"; 
         const ordner = "bilder"; 
 
-        async function initDream() {
+        async function startUniverse() {
             try {
                 const response = await fetch(`https://api.github.com/repos/${nutzer}/${repo}/contents/${ordner}`);
                 const data = await response.json();
                 const bilder = data.filter(f => f.name.match(/\.(jpg|jpeg|png)$/i));
 
-                const stage = document.getElementById('stage');
+                const universe = document.getElementById('universe');
 
-                bilder.forEach((bild, index) => {
-                    createFragment(bild, stage, index);
+                bilder.forEach((bild, i) => {
+                    const fragment = document.createElement('div');
+                    fragment.className = 'photo-fragment';
+                    fragment.innerHTML = `<img src="${bild.download_url}"><span>Download</span>`;
+                    
+                    // Download Event
+                    fragment.onclick = () => {
+                        window.open(bild.download_url, '_blank');
+                    };
+
+                    universe.appendChild(fragment);
+                    animatePhoto(fragment, i);
                 });
-
             } catch (e) { console.error(e); }
         }
 
-        function createFragment(bild, stage, index) {
-            const fragment = document.createElement('div');
-            fragment.className = 'fragment';
-            
-            // Zufällige Positionierung auf der Y-Achse (Höhe)
-            const topPos = Math.random() * 60 + 10; 
-            fragment.style.top = topPos + "%";
-            
-            // Zufällige Größe für Tiefe
-            const size = Math.random() * 200 + 200;
-            
-            fragment.innerHTML = `
-                <img src="${bild.download_url}" style="width: ${size}px;">
-                <div class="dl-hint">Klick zum Speichern</div>
-            `;
+        function animatePhoto(el, index) {
+            // Zufällige Flugbahn-Werte
+            let z = -2000 - (index * 500); // Startet tief im Raum
+            let x = (Math.random() - 0.5) * 2000;
+            let y = (Math.random() - 0.5) * 2000;
+            let rotation = (Math.random() - 0.5) * 100;
+            let speed = 2 + Math.random() * 3;
 
-            // Download-Funktion
-            fragment.onclick = () => {
-                const link = document.createElement('a');
-                link.href = bild.download_url;
-                link.download = bild.name;
-                link.click();
-            };
-
-            stage.appendChild(fragment);
-
-            // Bewegung konfigurieren
-            // Jedes Bild bekommt eine eigene Geschwindigkeit (zwischen 15 und 40 Sekunden)
-            const duration = Math.random() * 25000 + 15000;
-            const delay = Math.random() * index * 2000; // Staffelung beim Start
-
-            animate(fragment, duration, delay);
-        }
-
-        function animate(el, duration, delay) {
-            let start = null;
-            const w = window.innerWidth;
-            const elWidth = 500;
-
-            function step(timestamp) {
-                if (!start) start = timestamp;
-                const progress = (timestamp - start - delay) / duration;
-
-                if (progress > 0) {
-                    const x = w - (progress * (w + elWidth * 2));
-                    el.style.transform = `translateX(${x - w}px)`;
-                    
-                    // Ein- und Ausblenden an den Rändern
-                    if (x < 100 || x > w - 100) {
-                        el.style.opacity = "0";
-                    } else {
-                        // Unterschiedliche Transparenz je nach Tiefe (Größe)
-                        el.style.opacity = (parseInt(el.style.top) / 100) + 0.1;
-                    }
+            function move() {
+                z += speed; // Kommt auf den Betrachter zu
+                
+                // Wenn das Bild "hinter" uns ist, wird es wieder nach hinten gesetzt
+                if (z > 1000) {
+                    z = -5000;
+                    x = (Math.random() - 0.5) * 2000;
+                    y = (Math.random() - 0.5) * 2000;
                 }
 
-                if (progress < 1.1) {
-                    window.requestAnimationFrame(step);
-                } else {
-                    // Reset für Endlos-Schleife
-                    start = null;
-                    window.requestAnimationFrame(step);
-                }
+                // Parallax-Effekt: Je näher, desto transparenter werden die Ränder
+                let opacity = 1;
+                if (z > 500) opacity = (1000 - z) / 500;
+                if (z < -4000) opacity = (z + 5000) / 1000;
+
+                el.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${rotation}deg)`;
+                el.style.opacity = opacity;
+
+                requestAnimationFrame(move);
             }
-            window.requestAnimationFrame(step);
+            move();
         }
 
-        initDream();
+        startUniverse();
     </script>
 </body>
 </html>
