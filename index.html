@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ein Tag voller Segen & unvergessliche Momente</title>
+    <title>Erinnerungen an die Firmung</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Inter:wght@200;400&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
@@ -16,380 +16,214 @@
             --font-script: 'Dancing Script', cursive;
         }
 
-        /* --- ALLGEMEIN --- */
         body { 
             font-family: var(--font-sans); 
             background-color: var(--soft-white); 
             margin: 0; 
             color: var(--deep-dark); 
             overflow-x: hidden;
-            opacity: 0; /* Versteckt Seite bis alles geladen ist */
-            transition: opacity 2s ease-in-out;
         }
-        body.loaded { opacity: 1; }
 
-        /* --- CUSTOM CURSOR GLOW --- */
-        #cursor-glow {
-            position: fixed;
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(circle, rgba(var(--gold-main), 0.5) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out, opacity 0.5s ease-out;
-            z-index: 9999;
-            opacity: 0;
-            filter: blur(8px);
-        }
-        body:hover #cursor-glow { opacity: 1; }
-
-        /* --- HEADER & BACKGROUND VIDEO --- */
+        /* --- HEADER & TITEL --- */
         header { 
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            padding: 60px 20px 20px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-            color: var(--soft-white);
-        }
-        #header-video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            z-index: -2;
-            transform: translate(-50%, -50%);
-            background-size: cover;
-        }
-        .header-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5); /* Dunkleres Overlay für Lesbarkeit */
-            z-index: -1;
+            background: white;
         }
 
         h1 { 
             font-family: var(--font-serif); 
-            font-size: clamp(3rem, 10vw, 5.5rem); 
+            font-size: clamp(2rem, 6vw, 3.5rem); 
             font-style: italic;
             color: var(--gold-main); 
             margin: 0;
-            text-shadow: 0 0 15px rgba(255,255,255,0.4), 0 0 25px rgba(var(--gold-main),0.6);
-            letter-spacing: 2px;
-            z-index: 1;
         }
+
         .subtitle {
-            font-family: var(--font-sans);
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            letter-spacing: 5px;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.8);
-            margin-top: 15px;
-            z-index: 1;
+            color: #999;
+            margin-top: 10px;
         }
 
-        /* --- PARTIKEL EFFEKT --- */
-        #particles-js {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0;
+        /* --- BILDER SLIDER GANZ OBEN --- */
+        .slider-section { 
+            padding: 20px 0 40px; 
+            background: white;
+            border-bottom: 1px solid #eee;
         }
 
-        /* --- AUDIO PLAYER --- */
-        #audio-player {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(var(--deep-dark), 0.7);
-            padding: 8px 15px;
-            border-radius: 5px;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        }
-        #audio-player button {
-            background: none;
-            border: none;
-            color: var(--gold-main);
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 5px;
-        }
-        #audio-player input[type="range"] {
-            width: 80px;
-            margin-left: 10px;
+        .slider-track { 
+            display: flex; 
+            width: max-content; 
+            animation: scroll 120s linear infinite; 
         }
 
-        /* --- DROPBOX SECTION --- */
+        .slider-track img { 
+            height: 280px; 
+            margin: 0 15px; 
+            border-radius: 4px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: transform 0.5s ease;
+        }
+
+        .slider-track img:hover { transform: scale(1.02); }
+
+        @keyframes scroll { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-50%); } 
+        }
+
+        /* --- DROPBOX BEREICH --- */
         .dropbox-area {
-            padding: 80px 20px;
-            background: var(--soft-white);
+            padding: 60px 20px;
             text-align: center;
-            position: relative;
+            background: var(--soft-white);
         }
+
         .btn-dropbox {
             display: inline-block;
-            padding: 22px 60px;
+            padding: 18px 45px;
             background: var(--gold-main);
             color: white;
-            border: none;
             text-decoration: none;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             border-radius: 50px;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 15px 40px rgba(var(--gold-main),0.3);
+            box-shadow: 0 10px 30px rgba(184, 150, 45, 0.3);
+            transition: all 0.4s;
         }
+
         .btn-dropbox:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(var(--gold-main),0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(184, 150, 45, 0.4);
         }
 
-        /* --- SLIDER --- */
-        .slider-section { 
-            padding: 60px 0; 
-            background: linear-gradient(to bottom, var(--soft-white), #f8f5f2); 
-            border-top: 1px solid rgba(var(--gold-main),0.1);
-        }
-        .slider-track { display: flex; width: max-content; animation: scroll 150s linear infinite; }
-        .slider-track img { 
-            height: 350px; margin: 0 40px; border-radius: 5px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            filter: grayscale(80%);
-            transition: all 0.8s ease;
-        }
-        .slider-track img:hover { filter: grayscale(0%); transform: scale(1.03); }
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* --- GALERIE MIT OVERLAY --- */
+        /* --- GALERIE GITTER --- */
         .gallery-container { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
-            gap: 60px; 
-            padding: 100px 50px; 
-            max-width: 1800px; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 40px; 
+            padding: 60px 40px; 
+            max-width: 1400px; 
             margin: 0 auto; 
-            background: linear-gradient(to bottom, #f8f5f2, var(--soft-white));
         }
 
         .photo-card { 
-            position: relative;
-            background: var(--soft-white); 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-            overflow: hidden;
+            background: white; 
+            padding: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), 
-                        transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
         }
+
         .photo-card.visible { opacity: 1; transform: translateY(0); }
 
         .photo-card img { 
             width: 100%; 
-            height: 500px; /* Größere Bilder im Gitter */
+            height: 350px;
             object-fit: cover;
-            filter: grayscale(100%);
-            transition: filter 1s ease-out, transform 0.6s ease;
+            margin-bottom: 15px;
         }
-        .photo-card:hover img { filter: grayscale(0%); transform: scale(1.05); }
 
-        .image-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(var(--deep-dark), 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            z-index: 5;
-        }
-        .photo-card:hover .image-overlay { opacity: 1; }
-        .overlay-button {
-            background: var(--gold-main);
-            color: white;
-            padding: 15px 30px;
+        .dl-link {
+            display: block;
+            text-align: right;
+            font-family: var(--font-serif);
+            font-style: italic;
+            color: var(--gold-main);
             text-decoration: none;
-            font-weight: bold;
-            border-radius: 50px;
-            transition: all 0.3s;
+            font-size: 1.1rem;
         }
-        .overlay-button:hover { background: #d4af37; transform: scale(1.1); }
 
-        /* --- FOOTER & WIDMUNG --- */
+        /* --- FOOTER --- */
         footer { 
-            padding: 120px 50px; 
+            padding: 80px 20px; 
             background: var(--deep-dark); 
-            color: rgba(255,255,255,0.7); 
+            color: white; 
             text-align: center;
         }
+
         .dedication {
             font-family: var(--font-script);
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-size: 2rem;
             color: var(--gold-main);
-            margin-bottom: 20px;
-        }
-        .signature {
-            font-family: var(--font-script);
-            font-size: clamp(1.2rem, 4vw, 2rem);
-            color: rgba(var(--gold-main),0.8);
-            margin-top: 30px;
         }
     </style>
 </head>
 <body>
 
-    <div id="cursor-glow"></div>
-
-    <div id="audio-player">
-        <audio id="background-music" loop>
-            <source src="hintergrundmusik.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
-        <button id="play-pause-btn">▶</button>
-        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.2">
-    </div>
-
     <header>
-        <video autoplay muted loop id="header-video">
-            <source src="hintergrundvideo.mp4" type="video/mp4">
-            Dein Browser unterstützt das Video nicht.
-        </video>
-        <div class="header-overlay"></div>
-        <div id="particles-js"></div> <div class="subtitle">Ein heiliger Moment</div>
-        <h1>Der Segen der Firmung</h1>
+        <div class="subtitle">Erinnerungen</div>
+        <h1>Ein Tag voller Segen</h1>
     </header>
-
-    <div class="dropbox-area">
-        <p style="font-size: 1.1rem; max-width: 700px; margin: 0 auto 30px;">
-            Wir freuen uns, diese besonderen Momente mit Ihnen zu teilen. Alle Fotos 
-            (über 90 Stück) stehen in voller Auflösung in unserer Dropbox-Galerie zum Download bereit.
-        </p>
-        <a href="DEIN_DROPBOX_LINK" target="_blank" class="btn-dropbox">
-            Gesamtes Fotoalbum in Dropbox öffnen
-        </a>
-    </div>
 
     <div class="slider-section">
         <div class="slider-track" id="slider-track"></div>
     </div>
 
+    <div class="dropbox-area">
+        <p style="max-width: 600px; margin: 0 auto 30px;">
+            Alle Bilder (90+) in voller Auflösung findest du in unserem Dropbox-Album:
+        </p>
+        <a href="DEIN_DROPBOX_LINK" target="_blank" class="btn-dropbox">
+            Dropbox Album öffnen
+        </a>
+    </div>
+
     <main class="gallery-container" id="image-grid"></main>
 
     <footer>
-        <div class="dedication">
-            Mit tiefer Dankbarkeit und Freude für diesen unvergesslichen Tag.
-            <br>Mögen diese Bilder Sie an die Schönheit und den Segen erinnern.
-        </div>
-        <div class="signature">Ihre Familie Elias3422</div>
+        <div class="dedication">Alles Liebe zur Firmung</div>
+        <p style="opacity: 0.5; margin-top: 20px;">Elias3422 &bull; 2024</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // --- DEINE GITHUB & DROPBOX DATEN ---
         const nutzer = "Elias3422"; 
-        const repo = "Firmung-"; // Prüfe den exakten Namen deines Repos!
-        const ordner = "bilder"; // Name deines Bilder-Ordners auf GitHub
-        const dropboxLink = "DEIN_DROPBOX_LINK"; // Dein Link zum Dropbox-Ordner
-        // ------------------------------------
-
-        // --- SEITE LADEN ANIMATION ---
-        document.addEventListener("DOMContentLoaded", () => {
-            document.body.classList.add('loaded');
-            // Autoplay Musik nach User-Interaktion erlauben
-            document.getElementById('play-pause-btn').addEventListener('click', () => {
-                const music = document.getElementById('background-music');
-                if (music.paused) {
-                    music.play();
-                    document.getElementById('play-pause-btn').textContent = '⏸';
-                } else {
-                    music.pause();
-                    document.getElementById('play-pause-btn').textContent = '▶';
-                }
-            });
-            // Lautstärke-Regler
-            document.getElementById('volume-slider').addEventListener('input', (event) => {
-                document.getElementById('background-music').volume = event.target.value;
-            });
-        });
-
-        // --- CUSTOM CURSOR GLOW ---
-        document.addEventListener('mousemove', e => {
-            const cursorGlow = document.getElementById('cursor-glow');
-            cursorGlow.style.left = `${e.clientX}px`;
-            cursorGlow.style.top = `${e.clientY}px`;
-        });
-
-        // --- PARTIKEL EFFEKT ---
-        particlesJS('particles-js', {
-            "particles": {
-                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": "#d4af37" },
-                "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
-                "opacity": { "value": 0.5, "random": false, "anim": { "enable": false } },
-                "size": { "value": 3, "random": true, "anim": { "enable": false } },
-                "line_linked": { "enable": false },
-                "move": { "enable": true, "speed": 1, "direction": "top", "random": true, "straight": false, "out_mode": "out", "bounce": false },
-            },
-            "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": false }, "resize": true } },
-            "retina_detect": true
-        });
-
-        // --- BILDER LADEN & SCROLL REVEAL ---
-        const sliderTrack = document.getElementById('slider-track');
-        const imageGrid = document.getElementById('image-grid');
+        const repo = "Firmung-"; 
+        const ordner = "bilder"; 
 
         async function ladeBilder() {
-            const githubApiUrl = `https://api.github.com/repos/${nutzer}/${repo}/contents/${ordner}`;
+            const url = `https://api.github.com/repos/${nutzer}/${repo}/contents/${ordner}`;
             try {
-                const response = await fetch(githubApiUrl);
+                const response = await fetch(url);
                 const dateien = await response.json();
                 const bilder = dateien.filter(f => f.name.match(/\.(jpg|jpeg|png)$/i));
 
                 bilder.forEach(bild => {
-                    // Slider
+                    // Slider oben
                     const imgS = document.createElement('img');
                     imgS.src = bild.download_url;
-                    sliderTrack.appendChild(imgS);
+                    document.getElementById('slider-track').appendChild(imgS);
 
-                    // Gitter
+                    // Gitter unten
                     const card = document.createElement('div');
                     card.className = 'photo-card';
                     card.innerHTML = `
-                        <img src="${bild.download_url}" loading="lazy" alt="Firmungsbild">
-                        <div class="image-overlay">
-                            <a href="${bild.download_url}" download class="overlay-button">Download</a>
-                        </div>
+                        <img src="${bild.download_url}" loading="lazy">
+                        <a href="${bild.download_url}" download class="dl-link">Herunterladen</a>
                     `;
-                    imageGrid.appendChild(card);
+                    document.getElementById('image-grid').appendChild(card);
                 });
 
-                if (bilder.length > 0) {
-                    sliderTrack.innerHTML += sliderTrack.innerHTML;
-                }
+                // Loop für Slider
+                document.getElementById('slider-track').innerHTML += document.getElementById('slider-track').innerHTML;
 
-                // Scroll-Reveal Observer initialisieren
+                // Einblend-Effekt beim Scrollen
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             entry.target.classList.add('visible');
-                            observer.unobserve(entry.target); // Optional: nur einmal animieren
                         }
                     });
                 }, { threshold: 0.1 });
                 document.querySelectorAll('.photo-card').forEach(card => observer.observe(card));
 
-            } catch (e) { console.error("Fehler beim Laden der Bilder: ", e); }
+            } catch (e) { console.error(e); }
         }
         ladeBilder();
     </script>
