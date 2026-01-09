@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firmungsbilder - Download</title>
+    <style>
+        /* Modernes & Elegantes Design */
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fcfaf7; margin: 0; color: #4a4a4a; text-align: center; }
+        header { padding: 40px 20px; }
+        
+        /* Langsamer Bilder-Slider oben */
+        .preview-slider { width: 100%; overflow: hidden; background: #fff; padding: 20px 0; border-y: 1px solid #e0d5c5; }
+        .slider-track { display: flex; width: max-content; animation: scroll 60s linear infinite; }
+        .slider-track img { height: 150px; margin: 0 10px; border-radius: 5px; }
+
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .preview-slider:hover .slider-track { animation-play-state: paused; }
+
+        /* Gitter für die 90 Bilder */
+        .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .grid-item { background: white; padding: 10px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .grid-item img { width: 100%; border-radius: 5px; display: block; margin-bottom: 10px; }
+        .btn-download { display: inline-block; padding: 8px 15px; background: #d4af37; color: white; text-decoration: none; border-radius: 20px; font-size: 0.85em; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Erinnerungen an die Firmung</h1>
+        <p>Klicken Sie auf den Button, um die Bilder in voller Qualität zu speichern.</p>
+    </header>
+
+    <div class="preview-slider">
+        <div class="slider-track" id="slider-track"></div>
+    </div>
+
+    <main class="download-grid" id="image-grid"></main>
+
+    <script>
+        // --- DEINE DATEN ---
+        const nutzer = "Elias3422"; 
+        const repo = "Firmung-"; // Prüfe bitte, ob dein Projekt exakt so heißt!
+        const ordner = "bilder"; // Der Name des Ordners mit den 90 Bildern
+        // -------------------
+
+        const sliderTrack = document.getElementById('slider-track');
+        const imageGrid = document.getElementById('image-grid');
+
+        async function ladeBilder() {
+            const url = `https://api.github.com/repos/${nutzer}/${repo}/contents/${ordner}`;
+            
+            try {
+                const response = await fetch(url);
+                const dateien = await response.json();
+
+                // Nur echte Bilder filtern
+                const bilder = dateien.filter(f => f.name.match(/\.(jpg|jpeg|png)$/i));
+
+                bilder.forEach(bild => {
+                    // Bilder für den Slider oben
+                    const imgS = document.createElement('img');
+                    imgS.src = bild.download_url;
+                    sliderTrack.appendChild(imgS);
+
+                    // Bilder für das Gitter unten
+                    const item = document.createElement('div');
+                    item.className = 'grid-item';
+                    item.innerHTML = `
+                        <img src="${bild.download_url}" loading="lazy">
+                        <a href="${bild.download_url}" download="${bild.name}" class="btn-download">Download</a>
+                    `;
+                    imageGrid.appendChild(item);
+                });
+
+                // Verdoppeln für Endlos-Effekt
+                sliderTrack.innerHTML += sliderTrack.innerHTML;
+
+            } catch (e) {
+                console.error("Fehler: " + e);
+                document.body.innerHTML += "<p>Bilder konnten nicht geladen werden. Prüfe Repository-Name und Ordner.</p>";
+            }
+        }
+        ladeBilder();
+    </script>
+</body>
+</html>
