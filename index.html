@@ -3,229 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erinnerungen an die Firmung</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Inter:wght@200;400&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
-    
+    <title>Erinnerungen im Fluss</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold-main: #b8962d;
-            --soft-white: #fdfbf9;
-            --deep-dark: #2c2924;
-            --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Inter', sans-serif;
-            --font-script: 'Dancing Script', cursive;
+            --gold: rgba(212, 175, 55, 0.6);
+            --bg: #050505;
         }
 
-        body { 
-            font-family: var(--font-sans); 
-            background-color: var(--soft-white); 
-            margin: 0; 
-            color: var(--deep-dark); 
-            overflow-x: hidden;
-        }
-
-        /* --- HEADER & TITEL --- */
-        header { 
-            padding: 60px 20px 20px;
-            text-align: center;
-            background: white;
-        }
-
-        h1 { 
-            font-family: var(--font-serif); 
-            font-size: clamp(2rem, 6vw, 3.5rem); 
-            font-style: italic;
-            color: var(--gold-main); 
+        body, html {
             margin: 0;
-        }
-
-        .subtitle {
-            font-size: 0.9rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #999;
-            margin-top: 10px;
-        }
-
-        /* --- BILDER SLIDER GANZ OBEN --- */
-        .slider-section { 
-            padding: 20px 0 40px; 
-            background: white;
-            border-bottom: 1px solid #eee;
-        }
-
-        .slider-track { 
-            display: flex; 
-            width: max-content; 
-            animation: scroll 120s linear infinite; 
-        }
-
-        .slider-track img { 
-            height: 280px; 
-            margin: 0 15px; 
-            border-radius: 4px; 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            transition: transform 0.5s ease;
-        }
-
-        .slider-track img:hover { transform: scale(1.02); }
-
-        @keyframes scroll { 
-            0% { transform: translateX(0); } 
-            100% { transform: translateX(-50%); } 
-        }
-
-        /* --- DROPBOX BEREICH --- */
-        .dropbox-area {
-            padding: 60px 20px;
-            text-align: center;
-            background: var(--soft-white);
-        }
-
-        .btn-dropbox {
-            display: inline-block;
-            padding: 18px 45px;
-            background: var(--gold-main);
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg);
             color: white;
-            text-decoration: none;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(184, 150, 45, 0.3);
-            transition: all 0.4s;
+            font-family: 'Playfair Display', serif;
+            overflow: hidden; /* Verhindert normales Scrollen */
         }
 
-        .btn-dropbox:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(184, 150, 45, 0.4);
+        /* --- BACKGROUND --- */
+        .canvas-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%);
+            z-index: -1;
         }
 
-        /* --- GALERIE GITTER --- */
-        .gallery-container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-            gap: 40px; 
-            padding: 60px 40px; 
-            max-width: 1400px; 
-            margin: 0 auto; 
+        /* --- HEADER --- */
+        header {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            z-index: 100;
+            pointer-events: none;
         }
 
-        .photo-card { 
-            background: white; 
-            padding: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s ease-out;
-        }
-
-        .photo-card.visible { opacity: 1; transform: translateY(0); }
-
-        .photo-card img { 
-            width: 100%; 
-            height: 350px;
-            object-fit: cover;
-            margin-bottom: 15px;
-        }
-
-        .dl-link {
-            display: block;
-            text-align: right;
-            font-family: var(--font-serif);
+        h1 {
+            font-size: 5rem;
             font-style: italic;
-            color: var(--gold-main);
-            text-decoration: none;
-            font-size: 1.1rem;
+            margin: 0;
+            opacity: 0.8;
+            letter-spacing: 5px;
+            background: linear-gradient(to right, #fff, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* --- FOOTER --- */
-        footer { 
-            padding: 80px 20px; 
-            background: var(--deep-dark); 
-            color: white; 
+        /* --- DREAM FLOAT CONTAINER --- */
+        .stage {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .float-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Jedes Bild ist ein "Erinnerungs-Fragment" */
+        .fragment {
+            position: absolute;
+            right: -500px; /* Startet außerhalb rechts */
+            opacity: 0.4;
+            filter: blur(2px) grayscale(30%);
+            transition: transform 0.3s ease-out, opacity 0.5s, filter 0.5s;
+            cursor: pointer;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .fragment img {
+            display: block;
+            border: 1px solid rgba(255,255,255,0.1);
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+        .fragment:hover {
+            opacity: 1 !important;
+            filter: blur(0) grayscale(0);
+            z-index: 1000 !important;
+            transform: scale(1.1) !important;
+        }
+
+        /* Download-Trigger bei Klick */
+        .dl-hint {
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            width: 100%;
             text-align: center;
+            font-size: 0.8rem;
+            color: var(--gold);
+            opacity: 0;
+            transition: 0.3s;
         }
 
-        .dedication {
-            font-family: var(--font-script);
-            font-size: 2rem;
-            color: var(--gold-main);
+        .fragment:hover .dl-hint {
+            opacity: 1;
+            bottom: 10px;
         }
+
+        /* --- DROPBOX FIX --- */
+        .dropbox-link {
+            position: absolute;
+            bottom: 5%;
+            right: 5%;
+            z-index: 1000;
+            color: var(--gold);
+            text-decoration: none;
+            border: 1px solid var(--gold);
+            padding: 15px 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            transition: 0.4s;
+        }
+
+        .dropbox-link:hover {
+            background: var(--gold);
+            color: black;
+        }
+
     </style>
 </head>
 <body>
 
+    <div class="canvas-bg"></div>
+
     <header>
-        <div class="subtitle">Erinnerungen</div>
-        <h1>Ein Tag voller Segen</h1>
+        <h1>Firmung</h1>
+        <p style="letter-spacing: 10px; opacity: 0.5;">MEMORIES IN MOTION</p>
     </header>
 
-    <div class="slider-section">
-        <div class="slider-track" id="slider-track"></div>
-    </div>
+    <a href="DEIN_DROPBOX_LINK" target="_blank" class="dropbox-link">Full Collection (Dropbox)</a>
 
-    <div class="dropbox-area">
-        <p style="max-width: 600px; margin: 0 auto 30px;">
-            Alle Bilder (90+) in voller Auflösung findest du in unserem Dropbox-Album:
-        </p>
-        <a href="DEIN_DROPBOX_LINK" target="_blank" class="btn-dropbox">
-            Dropbox Album öffnen
-        </a>
-    </div>
-
-    <main class="gallery-container" id="image-grid"></main>
-
-    <footer>
-        <div class="dedication">Alles Liebe zur Firmung</div>
-        <p style="opacity: 0.5; margin-top: 20px;">Elias3422 &bull; 2024</p>
-    </footer>
+    <div class="stage" id="stage">
+        </div>
 
     <script>
         const nutzer = "Elias3422"; 
         const repo = "Firmung-"; 
         const ordner = "bilder"; 
 
-        async function ladeBilder() {
-            const url = `https://api.github.com/repos/${nutzer}/${repo}/contents/${ordner}`;
+        async function initDream() {
             try {
-                const response = await fetch(url);
-                const dateien = await response.json();
-                const bilder = dateien.filter(f => f.name.match(/\.(jpg|jpeg|png)$/i));
+                const response = await fetch(`https://api.github.com/repos/${nutzer}/${repo}/contents/${ordner}`);
+                const data = await response.json();
+                const bilder = data.filter(f => f.name.match(/\.(jpg|jpeg|png)$/i));
 
-                bilder.forEach(bild => {
-                    // Slider oben
-                    const imgS = document.createElement('img');
-                    imgS.src = bild.download_url;
-                    document.getElementById('slider-track').appendChild(imgS);
+                const stage = document.getElementById('stage');
 
-                    // Gitter unten
-                    const card = document.createElement('div');
-                    card.className = 'photo-card';
-                    card.innerHTML = `
-                        <img src="${bild.download_url}" loading="lazy">
-                        <a href="${bild.download_url}" download class="dl-link">Herunterladen</a>
-                    `;
-                    document.getElementById('image-grid').appendChild(card);
+                bilder.forEach((bild, index) => {
+                    createFragment(bild, stage, index);
                 });
-
-                // Loop für Slider
-                document.getElementById('slider-track').innerHTML += document.getElementById('slider-track').innerHTML;
-
-                // Einblend-Effekt beim Scrollen
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
-                        }
-                    });
-                }, { threshold: 0.1 });
-                document.querySelectorAll('.photo-card').forEach(card => observer.observe(card));
 
             } catch (e) { console.error(e); }
         }
-        ladeBilder();
+
+        function createFragment(bild, stage, index) {
+            const fragment = document.createElement('div');
+            fragment.className = 'fragment';
+            
+            // Zufällige Positionierung auf der Y-Achse (Höhe)
+            const topPos = Math.random() * 60 + 10; 
+            fragment.style.top = topPos + "%";
+            
+            // Zufällige Größe für Tiefe
+            const size = Math.random() * 200 + 200;
+            
+            fragment.innerHTML = `
+                <img src="${bild.download_url}" style="width: ${size}px;">
+                <div class="dl-hint">Klick zum Speichern</div>
+            `;
+
+            // Download-Funktion
+            fragment.onclick = () => {
+                const link = document.createElement('a');
+                link.href = bild.download_url;
+                link.download = bild.name;
+                link.click();
+            };
+
+            stage.appendChild(fragment);
+
+            // Bewegung konfigurieren
+            // Jedes Bild bekommt eine eigene Geschwindigkeit (zwischen 15 und 40 Sekunden)
+            const duration = Math.random() * 25000 + 15000;
+            const delay = Math.random() * index * 2000; // Staffelung beim Start
+
+            animate(fragment, duration, delay);
+        }
+
+        function animate(el, duration, delay) {
+            let start = null;
+            const w = window.innerWidth;
+            const elWidth = 500;
+
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                const progress = (timestamp - start - delay) / duration;
+
+                if (progress > 0) {
+                    const x = w - (progress * (w + elWidth * 2));
+                    el.style.transform = `translateX(${x - w}px)`;
+                    
+                    // Ein- und Ausblenden an den Rändern
+                    if (x < 100 || x > w - 100) {
+                        el.style.opacity = "0";
+                    } else {
+                        // Unterschiedliche Transparenz je nach Tiefe (Größe)
+                        el.style.opacity = (parseInt(el.style.top) / 100) + 0.1;
+                    }
+                }
+
+                if (progress < 1.1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    // Reset für Endlos-Schleife
+                    start = null;
+                    window.requestAnimationFrame(step);
+                }
+            }
+            window.requestAnimationFrame(step);
+        }
+
+        initDream();
     </script>
 </body>
 </html>
