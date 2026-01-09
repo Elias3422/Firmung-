@@ -1,192 +1,191 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Segen im Unendlichen</title>
-    <style>
-        :root {
-            --gold: #d4af37;
-            --bg: #020202;
-        }
+<meta charset="UTF-8">
+<title>Ein heiliger Moment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: var(--bg);
-            color: white;
-            font-family: 'Georgia', serif;
-            overflow: hidden;
-            perspective: 1000px; /* Erzeugt den 3D-Raum */
-        }
+<style>
+/* ================= CORE ================= */
+:root {
+    --gold: #d6b36a;
+}
 
-        /* Hintergrund-Sterne */
-        .stars {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(white, rgba(255,255,255,0) 2px) 0 0 / 50px 50px,
-                        radial-gradient(white, rgba(255,255,255,0) 1px) 10px 10px / 100px 100px;
-            opacity: 0.2;
-            z-index: -1;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        header {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 10;
-            pointer-events: none;
-        }
+body {
+    background: radial-gradient(circle at top, #111 0%, #000 60%);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    color: white;
+    overflow-x: hidden;
+}
 
-        h1 {
-            font-size: 4rem;
-            letter-spacing: 15px;
-            text-transform: uppercase;
-            color: var(--gold);
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
-            margin: 0;
-            opacity: 0.8;
-        }
+/* ================= HERO ================= */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
 
-        /* Der 3D-Container */
-        #universe {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            transform-style: preserve-3d;
-        }
+.hero h1 {
+    font-size: clamp(3rem, 7vw, 5rem);
+    letter-spacing: 3px;
+}
 
-        /* Die fliegenden Bild-Fragmente */
-        .photo-fragment {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300px;
-            transform-style: preserve-3d;
-            cursor: pointer;
-            transition: filter 0.5s, transform 0.3s;
-        }
+.hero p {
+    margin-top: 20px;
+    opacity: 0.7;
+    font-size: 1.2rem;
+}
 
-        .photo-fragment img {
-            width: 100%;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            box-shadow: 0 0 40px rgba(0,0,0,1);
-            filter: opacity(0.6) brightness(0.7);
-            transition: all 0.5s;
-        }
+/* film grain */
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+}
 
-        .photo-fragment:hover img {
-            filter: opacity(1) brightness(1.2);
-            box-shadow: 0 0 50px var(--gold);
-            transform: scale(1.2);
-        }
+/* ================= GALLERY ================= */
+.scene {
+    position: relative;
+    height: 90vh;
+    overflow: hidden;
+}
 
-        .photo-fragment span {
-            position: absolute;
-            bottom: -30px;
-            left: 0; width: 100%;
-            text-align: center;
-            color: var(--gold);
-            font-size: 0.7rem;
-            opacity: 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+.layer {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    gap: 40px;
+    transform: translateY(-50%);
+    will-change: transform;
+}
 
-        .photo-fragment:hover span { opacity: 1; }
+.layer img {
+    height: 300px;
+    border-radius: 20px;
+    filter: brightness(.9) contrast(1.1);
+    transition: transform 1s ease, filter 1s ease;
+}
 
-        .dropbox-link {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            color: white;
-            text-decoration: none;
-            border: 1px solid var(--gold);
-            padding: 10px 30px;
-            letter-spacing: 5px;
-            background: rgba(0,0,0,0.8);
-            transition: 0.5s;
-        }
+.layer img:hover {
+    transform: scale(1.15);
+    filter: brightness(1.05) drop-shadow(0 40px 80px rgba(0,0,0,.8));
+}
 
-        .dropbox-link:hover { background: var(--gold); color: black; }
-    </style>
+/* different depths */
+.layer.back {
+    animation: move 180s linear infinite;
+    opacity: .35;
+    filter: blur(2px);
+}
+
+.layer.mid {
+    animation: move 120s linear infinite;
+}
+
+.layer.front {
+    animation: move 80s linear infinite;
+}
+
+@keyframes move {
+    from { transform: translate(0, -50%); }
+    to   { transform: translate(-50%, -50%); }
+}
+
+/* ================= CTA ================= */
+.cta {
+    text-align: center;
+    margin: 120px 0;
+}
+
+.cta a {
+    padding: 22px 50px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #f1d58a, #b99643);
+    color: black;
+    font-size: 1.3rem;
+    text-decoration: none;
+    box-shadow: 0 0 40px rgba(214,179,106,.6);
+    transition: all .4s ease;
+}
+
+.cta a:hover {
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 0 80px rgba(214,179,106,.9);
+}
+
+/* ================= FOOTER ================= */
+footer {
+    text-align: center;
+    opacity: .4;
+    padding-bottom: 40px;
+}
+</style>
 </head>
+
 <body>
 
-    <div class="stars"></div>
-    
-    <header>
-        <h1>FIRMUNG</h1>
-        <p style="letter-spacing: 5px;">EINE REISE DURCH DIE ZEIT</p>
-    </header>
+<section class="hero">
+    <h1>Ein heiliger Moment</h1>
+    <p>Firmung – festgehalten für die Ewigkeit</p>
+</section>
 
-    <a href="DEIN_DROPBOX_LINK" target="_blank" class="dropbox-link">ALLE BILDER</a>
+<section class="scene">
+    <div class="layer back" id="back"></div>
+    <div class="layer mid" id="mid"></div>
+    <div class="layer front" id="front"></div>
+</section>
 
-    <div id="universe"></div>
+<div class="cta">
+    <a href="HIER_DEIN_DROPBOX_LINK" target="_blank">
+        Gesamte Galerie herunterladen
+    </a>
+</div>
 
-    <script>
-        const nutzer = "Elias3422"; 
-        const repo = "Firmung-"; 
-        const ordner = "bilder"; 
+<footer>
+    © Firmung
+</footer>
 
-        async function startUniverse() {
-            try {
-                const response = await fetch(`https://api.github.com/repos/${nutzer}/${repo}/contents/${ordner}`);
-                const data = await response.json();
-                const bilder = data.filter(f => f.name.match(/\.(jpg|jpeg|png)$/i));
+<script>
+/* ========= BILDER (NICHT UMBENENNEN) ========= */
+const bilder = [
+    "IMG_001.jpg",
+    "IMG_002.jpg",
+    "IMG_003.jpg"
+    // ...
+];
 
-                const universe = document.getElementById('universe');
+const layers = {
+    back: document.getElementById("back"),
+    mid: document.getElementById("mid"),
+    front: document.getElementById("front")
+};
 
-                bilder.forEach((bild, i) => {
-                    const fragment = document.createElement('div');
-                    fragment.className = 'photo-fragment';
-                    fragment.innerHTML = `<img src="${bild.download_url}"><span>Download</span>`;
-                    
-                    // Download Event
-                    fragment.onclick = () => {
-                        window.open(bild.download_url, '_blank');
-                    };
+function fill(layer, factor) {
+    [...bilder, ...bilder].forEach((name, i) => {
+        if (i % factor !== 0) return;
+        const img = document.createElement("img");
+        img.src = "bilder/" + name;
+        img.loading = "lazy";
+        layer.appendChild(img);
+    });
+}
 
-                    universe.appendChild(fragment);
-                    animatePhoto(fragment, i);
-                });
-            } catch (e) { console.error(e); }
-        }
+fill(layers.back, 3);
+fill(layers.mid, 2);
+fill(layers.front, 1);
+</script>
 
-        function animatePhoto(el, index) {
-            // Zufällige Flugbahn-Werte
-            let z = -2000 - (index * 500); // Startet tief im Raum
-            let x = (Math.random() - 0.5) * 2000;
-            let y = (Math.random() - 0.5) * 2000;
-            let rotation = (Math.random() - 0.5) * 100;
-            let speed = 2 + Math.random() * 3;
-
-            function move() {
-                z += speed; // Kommt auf den Betrachter zu
-                
-                // Wenn das Bild "hinter" uns ist, wird es wieder nach hinten gesetzt
-                if (z > 1000) {
-                    z = -5000;
-                    x = (Math.random() - 0.5) * 2000;
-                    y = (Math.random() - 0.5) * 2000;
-                }
-
-                // Parallax-Effekt: Je näher, desto transparenter werden die Ränder
-                let opacity = 1;
-                if (z > 500) opacity = (1000 - z) / 500;
-                if (z < -4000) opacity = (z + 5000) / 1000;
-
-                el.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${rotation}deg)`;
-                el.style.opacity = opacity;
-
-                requestAnimationFrame(move);
-            }
-            move();
-        }
-
-        startUniverse();
-    </script>
 </body>
 </html>
